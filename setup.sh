@@ -42,13 +42,59 @@ echo
 
 # --- 2. User Input Phase ---
 
-# --- App Name (handled first as it can provide defaults for others) ---
+# Function to draw a clean card-like UI for each placeholder
+prompt_with_card() {
+    local placeholder=$1
+    local files=$2
+    local default_value=$3
+
+    local file_count=$(echo "$files" | wc -l)
+    local max_files_to_show=5
+
+    echo -e "┌──────────────────────────────────────────────────"
+    echo -e "│ ${YELLOW}Placeholder:${NC} ${placeholder}"
+    echo -e "│ ${GREEN}Found in ${file_count} file(s):${NC}"
+
+    # Show a truncated list of files if it's too long
+    local count=0
+    while IFS= read -r file; do
+        if [ $count -lt $max_files_to_show ]; then
+            echo -e "│   - $file"
+            count=$((count + 1))
+        fi
+    done <<< "$files"
+
+    if [ $file_count -gt $max_files_to_show ]; then
+        local remaining=$((file_count - max_files_to_show))
+        echo -e "│   ...and ${remaining} more."
+    fi
+    
+    echo -e "└──────────────────────────────────────────────────"
+
+    local prompt_text="What value should be used for ${placeholder}?"
+    if [[ -n "$default_value" ]]; then
+        prompt_text="What value should be used for ${placeholder}? [${YELLOW}${default_value}${NC}]: "
+    fi
+    
+    read -p "$prompt_text" user_input
+    local final_value=${user_input:-$default_value}
+    placeholder_values["$placeholder"]=$final_value
+    echo
+}
+
+# --- App Name (handled first due to validation and project renaming) ---
 app_name_placeholder="{{your-app-name}}"
 if [[ ${placeholder_map[$app_name_placeholder]} ]]; then
     while true; do
-        read -p "Enter your application name (e.g., My Awesome App): " app_name_input
+        # Custom prompt for app name, as it's special
+        echo -e "┌──────────────────────────────────────────────────"
+        echo -e "│ ${YELLOW}Enter your application name.${NC}"
+        echo -e "│ This will be used to name the project and set up namespaces."
+        echo -e "└──────────────────────────────────────────────────"
+        read -p "Application Name (e.g., My Awesome App): " app_name_input
+
         if [[ -z "$app_name_input" ]]; then
-            echo -e "${RED}Application name cannot be empty.${NC}"
+            echo -e "${RED}Application name cannot be empty.${NC}\n"
             continue
         fi
         user_app_name=$app_name_input
@@ -59,15 +105,15 @@ if [[ ${placeholder_map[$app_name_placeholder]} ]]; then
 
         # C# validation
         if ! [[ "$pascal_case_name" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]; then
-            echo -e "${RED}Invalid name for C# namespace: '${pascal_case_name}'. It must start with a letter or underscore, and contain only letters, numbers, or underscores.${NC}"
+            echo -e "${RED}Invalid name for C# namespace: '${pascal_case_name}'. It must start with a letter or underscore, and contain only letters, numbers, or underscores.${NC}\n"
             continue
         fi
 
         # package.json validation
         if ! [[ "$kebab_case_name" =~ ^[a-z0-9_-]+$ ]]; then
-            echo -e "${RED}Invalid name for package.json: '${kebab_case_name}'. It must be lowercase and contain only letters, numbers, hyphens, or underscores.${NC}"
+            echo -e "${RED}Invalid name for package.json: '${kebab_case_name}'. It must be lowercase and contain only letters, numbers, hyphens, or underscores.${NC}\n"
             continue
-        fi
+        }
 
         placeholder_values["$app_name_placeholder-csharp"]=$pascal_case_name
         placeholder_values["$app_name_placeholder-kebab"]=$kebab_case_name
@@ -76,41 +122,21 @@ if [[ ${placeholder_map[$app_name_placeholder]} ]]; then
     echo
 fi
 
-# --- Loop through all placeholders to get user values ---
+# --- Loop through all other placeholders ---
 for placeholder in $placeholders; do
-    # Skip the main app-name placeholder as its values are derived
+    # Skip the main app-name placeholder as it's already handled
     if [ "$placeholder" == "$app_name_placeholder" ]; then
         continue
     fi
 
-    echo -e "Placeholder ${YELLOW}${placeholder}${NC} was found in:"
-    while IFS= read -r file; do
-        echo "  - $file"
-    done <<< "${placeholder_map[$placeholder]}"
-
-    # --- Smart Defaults ---
-    default_value=""
-    # Default for port
+    default_val=""
     if [ "$placeholder" == "{{port}}" ]; then
-        default_value="5000"
-    # Default for uninstaller name
-    elif [[ "$placeholder" == *"uninstallerName"* && -n "$user_app_name" ]]; then
-        default_value="$user_app_name Uninstaller"
-    # Default for other name/title variations
-    elif [[ "$placeholder" == *"Name"* || "$placeholder" == *"title"* || "$placeholder" == *"product"* && -n "$user_app_name" ]]; then
-        default_value="$user_app_name"
+        default_val="5000"
     fi
 
-    prompt_text="What value should be used for ${placeholder}?"
-    if [[ -n "$default_value" ]]; then
-        prompt_text="What value should be used for ${placeholder}? [${YELLOW}${default_value}${NC}]: "
-    fi
-
-    read -p "$prompt_text" user_input
-    final_value=${user_input:-$default_value}
-    placeholder_values["$placeholder"]=$final_value
-    echo
+    prompt_with_card "$placeholder" "${placeholder_map[$placeholder]}" "$default_val"
 done
+
 
 # --- 3. Confirmation Phase ---
 echo -e "${GREEN}--- Summary of Changes ---${NC}"
@@ -126,8 +152,8 @@ if [[ -n "$pascal_case_name" ]]; then
 fi
 
 # Other replacements
-for placeholder in $placeholders; do
-    if [ "$placeholder" == "$app_name_placeholder" ]; then
+for placeholder in "${!placeholder_values[@]}"; do
+    if [[ "$placeholder" == *"-csharp"* || "$placeholder" == *"-kebab"* ]]; then
         continue
     fi
     value=${placeholder_values[$placeholder]}
@@ -150,9 +176,10 @@ replace_in_file() {
     local placeholder=$1
     local value=$2
     local file=$3
-    # Escape for sed
-    local escaped_placeholder=$(sed -e 's/[\][/&]/\&/g' <<<"$placeholder")
-    local escaped_value=$(sed -e 's/[\][/&]/\&/g' <<<"$value")
+    # Escape for sed regex
+    local escaped_placeholder=$(sed -e 's/[][\/$*.^|{}]/\\&/g' <<<"$placeholder")
+    # Escape for sed replacement string
+    local escaped_value=$(sed -e 's/[\/&]/\\&/g' <<<"$value")
     sed -i "s/$escaped_placeholder/$escaped_value/g" "$file"
 }
 
