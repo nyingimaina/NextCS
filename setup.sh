@@ -180,7 +180,7 @@ replace_in_file() {
     local escaped_placeholder=$(sed -e 's/[][\/$*.^|{}]/\\&/g' <<<"$placeholder")
     # Escape for sed replacement string
     local escaped_value=$(sed -e 's/[\/&]/\\&/g' <<<"$value")
-    sed -i "s/$escaped_placeholder/$escaped_value/g" "$file"
+    sed -i '' "s/$escaped_placeholder/$escaped_value/g" "$file"
 }
 
 # Perform replacements
