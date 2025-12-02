@@ -176,15 +176,13 @@ replace_in_file() {
     local placeholder=$1
     local value=$2
     local file=$3
-    # Escape for sed regex
-    local escaped_placeholder=$(sed -e 's/[][\/$*.^|{}]/\\&/g' <<<"$placeholder")
-    # Escape for sed replacement string
-    local escaped_value=$(sed -e 's/[\/&]/\\&/g' <<<"$value")
-    
-    # Use a backup file for cross-platform compatibility with sed -i
-    sed -i.bak "s/$escaped_placeholder/$escaped_value/g" "$file"
-    # Remove the backup file
-    rm "${file}.bak"
+
+    # Using Perl for its superior cross-platform in-place editing.
+    # \Q...\E treats the placeholder literally, avoiding complex regex escaping.
+    # The replacement value is exported to an environment variable to prevent
+    # it from being interpreted by the perl script.
+    export REPLACEMENT_VALUE="$value"
+    perl -pi -e 's/\Q'"$placeholder"'\E/$ENV{REPLACEMENT_VALUE}/g' "$file"
 }
 
 # Perform replacements
@@ -220,10 +218,9 @@ if [[ -n "$pascal_case_name" ]]; then
         echo "  - Renamed backend/app.csproj to backend/${pascal_case_name}.csproj"
     fi
     if [ -f "NextCS.sln" ]; then
-        # This is a bit brittle, but should work for the current solution file format.
-        # It replaces both the project name and the path, using the backup-and-remove strategy for compatibility.
-        sed -i.bak -e "s/app.csproj/${pascal_case_name}.csproj/g" -e "s/\"app\",/\"${pascal_case_name}\",/g" "NextCS.sln"
-        rm "NextCS.sln.bak"
+        # Update the solution file using the robust replacement function
+        replace_in_file "app.csproj" "${pascal_case_name}.csproj" "NextCS.sln"
+        replace_in_file '"app"' "\"${pascal_case_name}\"" "NextCS.sln"
         echo "  - Updated NextCS.sln"
     fi
 fi
