@@ -9,7 +9,6 @@ NC='\033[0m' # No Color
 
 echo -e "${GREEN}--- Dependency Upgrade Script ---${NC}"
 echo "This script will attempt to upgrade dependencies for both frontend (JavaScript) and backend (C#) projects."
-echo "For C# projects, it will list outdated packages and provide instructions for manual review and upgrade, as fully automated upgrades can sometimes introduce breaking changes."
 echo
 
 # --- Frontend (JavaScript) Dependencies ---
@@ -48,14 +47,41 @@ if [ -d "backend" ]; then
     cd backend || { echo -e "${RED}Error: Could not navigate to backend directory.${NC}"; exit 1; }
 
     if ls *.csproj &> /dev/null; then
-        echo -e "${YELLOW}Listing outdated NuGet packages:${NC}"
-        dotnet list package --outdated
-        if [ $? -eq 0 ]; then
-            echo -e "${GREEN}Outdated NuGet packages listed. Please review them.${NC}"
-            echo -e "${YELLOW}To upgrade a specific package, use: dotnet add package <PackageName> --version <NewVersion>${NC}"
-            echo -e "${YELLOW}Example: dotnet add package Microsoft.AspNetCore.OpenApi --version 8.0.19${NC}"
+        # Get outdated packages
+        outdated_packages_output=$(dotnet list package --outdated)
+        echo "$outdated_packages_output"
+
+        # Parse outdated packages
+        # Extracts lines starting with '   > ' and then gets PackageName, CurrentVersion, LatestVersion
+        upgradable_packages=$(echo "$outdated_packages_output" | grep '^   > ' | awk '{print $2, $4, $5}')
+
+        if [ -z "$upgradable_packages" ]; then
+            echo -e "${GREEN}All backend NuGet packages are up to date.${NC}"
         else
-            echo -e "${RED}Error: Failed to list outdated NuGet packages.${NC}"
+            echo -e "${YELLOW}The following backend NuGet packages are outdated:${NC}"
+            echo "$upgradable_packages" | while read -r package_name current_version latest_version; do
+                echo -e "  - ${package_name} (Current: ${current_version}, Latest: ${latest_version})"
+            done
+            echo
+
+            read -p "Do you want to automatically upgrade all listed backend packages to their latest stable versions? (y/n): " confirm_upgrade
+            if [[ "$confirm_upgrade" == "y" || "$confirm_upgrade" == "Y" ]]; then
+                echo -e "${YELLOW}Proceeding with automatic upgrade. Please note this might include major version upgrades which could introduce breaking changes. Test your application thoroughly.${NC}"
+                echo "$upgradable_packages" | while read -r package_name current_version latest_version; do
+                    echo -e "${BLUE}Upgrading ${package_name} from ${current_version} to ${latest_version}...${NC}"
+                    dotnet add package "$package_name"
+                    if [ $? -eq 0 ]; then
+                        echo -e "${GREEN}Successfully upgraded ${package_name}.${NC}"
+                    else
+                        echo -e "${RED}Failed to upgrade ${package_name}.${NC}"
+                    fi
+                done
+                echo -e "${GREEN}Automatic backend package upgrade process completed.${NC}"
+            else
+                echo -e "${YELLOW}Automatic upgrade skipped.${NC}"
+                echo -e "${YELLOW}To manually upgrade a specific package, use: dotnet add package <PackageName> --version <NewVersion>${NC}"
+                echo -e "${YELLOW}Example: dotnet add package Microsoft.AspNetCore.OpenApi --version 8.0.20${NC}"
+            fi
         fi
     else
         echo -e "${YELLOW}No .csproj files found in backend directory. Skipping backend check.${NC}"
