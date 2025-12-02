@@ -1,0 +1,131 @@
+.fileUploadContainer {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0;
+}
+
+.label {
+  margin-bottom: 8px;
+  font-size: 16px;
+  color: #333;
+}
+
+.fileInputContainer {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border: 2px dashed;
+  border-color: var(--color-primary);
+  border-radius: 8px;
+  padding: 30px 30px;
+  background-color: #fff;
+  transition: background-color 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.fileInputContainer:hover {
+  background-color: #f7f7f7;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.fileInput {
+  display: none; /* Keep input hidden */
+}
+
+.fileName {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid transparent; /* Added to maintain focus effect */
+  color: #444;
+  font-size: 16px;
+  font-family: "Arial", sans-serif;
+  transition: border-color 0.2s ease;
+  text-align: center;
+}
+
+.visibleElements {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  cursor: "pointer";
+  border-radius: 5px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.visibleElements:hover {
+  color: var(--color-primary);
+  font-weight: bold;
+}
+
+.fileName:focus {
+  outline: none;
+  border-color: #2980b9; /* A sharper blue for focus */
+}
+
+.fileName::placeholder {
+  color: #999; /* Subtle placeholder color */
+}
+
+/* Progress dialog styles */
+.progressDialog {
+  margin-top: 12px;
+  width: 100%;
+  background-color: #f7f7f7;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.progressBar {
+  width: 100%;
+  background-color: #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 10px;
+  background-color: #2980b9; /* Blue color for progress fill */
+  transition: width 0.25s ease;
+}
+
+/* Status message styling */
+.statusMessage {
+  margin-top: 12px;
+  font-size: 16px;
+  color: #2980b9;
+  font-weight: bold;
+  text-align: right;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Success animation for 'complete' status */
+.successAnimation {
+  animation: fadeIn 0.5s ease;
+}
+
+/* Keyframe for fade-in effect */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Style changes when dragging over the drop area */
+.fileInputContainer.dragOver {
+  background-color: #eaf2f8;
+  border-color: #2980b9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

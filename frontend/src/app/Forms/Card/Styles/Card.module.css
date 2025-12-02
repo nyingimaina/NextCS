@@ -1,0 +1,39 @@
+.card {
+  background-color: var(--color-white);
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  padding: 24px;
+  margin-bottom: 1.5rem;
+  height: calc(100% - 1.5rem);
+}
+
+.card .cardBody {
+  padding: 0;
+}
+
+.card .cardTitle {
+  margin-bottom: 28px;
+  position: relative;
+  padding-left: 12px;
+}
+
+.card .cardTitle::before {
+  content: "";
+  width: 5px;
+  height: 28px;
+  background-color: var(--color-primary);
+  position: absolute;
+  left: 0;
+  top: -2px;
+}
+
+@media (max-width: 767.98px) {
+  .card .cardTitle::before {
+    top: 0;
+    bottom: 0;
+    margin: 0 auto;
+  }
+  .card {
+    padding: 12px;
+  }
+}

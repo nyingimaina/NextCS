@@ -1,0 +1,148 @@
+/* CircleButton.module.css */
+
+/* Base circular button */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  padding: 0.35rem;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  user-select: none;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+/* Outline shape */
+.outline {
+  border: 2px solid currentColor;
+  background: transparent;
+}
+
+.round {
+  border-radius: 50%;
+}
+
+/* Animations */
+.animated {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease,
+    color 0.2s ease;
+}
+
+.animated:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.animated:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+/* Bounce animation on click */
+@keyframes bounce {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(0.9);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  70% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.bounceOnClick:active {
+  animation: bounce 0.4s ease;
+}
+
+/* --- Color Variants (outline default, filled on hover) --- */
+
+/* Primary */
+.primary {
+  color: #0d6efd;
+  border-color: #0d6efd;
+}
+.primary:hover {
+  background: #0d6efd;
+  color: #fff;
+}
+
+/* Secondary */
+.secondary {
+  color: #6c757d;
+  border-color: #6c757d;
+}
+.secondary:hover {
+  background: #6c757d;
+  color: #fff;
+}
+
+/* Success */
+.success {
+  color: #198754;
+  border-color: #198754;
+}
+.success:hover {
+  background: #198754;
+  color: #fff;
+}
+
+/* Danger */
+.danger {
+  color: #dc3545;
+  border-color: #dc3545;
+}
+.danger:hover {
+  background: #dc3545;
+  color: #fff;
+}
+
+/* Warning */
+.warning {
+  color: #ffc107;
+  border-color: #ffc107;
+}
+.warning:hover {
+  background: #ffc107;
+  color: #212529;
+}
+
+/* Info */
+.info {
+  color: #0dcaf0;
+  border-color: #0dcaf0;
+}
+.info:hover {
+  background: #0dcaf0;
+  color: #212529;
+}
+
+/* Dark */
+.dark {
+  color: #212529;
+  border-color: #212529;
+}
+.dark:hover {
+  background: #212529;
+  color: #fff;
+}
+
+/* Light */
+.light {
+  color: #f8f9fa;
+  border-color: #f8f9fa;
+}
+.light:hover {
+  background: #f8f9fa;
+  color: #212529;
+}

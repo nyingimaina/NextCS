@@ -1,0 +1,75 @@
+.menuWrapper {
+  position: relative;
+  display: inline-block;
+  z-index: 0;
+}
+
+.trigger {
+  background: transparent;
+  border: none;
+  font-size: 1.6rem;
+  cursor: pointer;
+  /* padding: 0.25rem 0.5rem; */
+  color: #024b59; /* Dark teal trigger color */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.trigger:hover,
+.trigger:focus {
+  color: #016a80; /* Slightly brighter on hover/focus */
+  outline: none;
+}
+
+/* Light frosted glass menu */
+.menu {
+  background: rgba(255, 255, 255, 0.75); /* light frosted glass */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  padding: 0.5rem 0.25rem;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  border: 1px solid rgba(2, 75, 89, 0.15);
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 0.5rem;
+  z-index: 9999;
+  color: #024b59;
+  font-weight: 500;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Menu buttons */
+.menu button {
+  background: transparent;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  text-align: left;
+  color: #024b59;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.12s ease;
+  user-select: none;
+}
+
+/* Hover highlight with subtle teal shade */
+.menu button:hover,
+.menu button:focus {
+  background: rgba(2, 75, 89, 0.05);
+  outline: none;
+  transform: scale(1.03);
+}
+
+/* Optional: subtle active click effect */
+.menu button:active {
+  transform: scale(0.98);
+  background: rgba(2, 75, 89, 0.1);
+}

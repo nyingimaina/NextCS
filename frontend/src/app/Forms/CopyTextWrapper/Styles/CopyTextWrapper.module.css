@@ -1,0 +1,31 @@
+.copyWrapper {
+  cursor: pointer;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  color: #3a7ca5; /* Default calm blue */
+  transition: color 0.3s ease, transform 0.2s ease; /* Smooth color and transform transition */
+}
+
+.copyIcon {
+  margin-right: 8px;
+  font-size: 16px;
+  color: #3a7ca5; /* Default calm blue for the icon */
+  transition: color 0.3s ease, transform 0.2s ease; /* Smooth color and transform transition */
+  transform: translateY(0);
+}
+
+.copyWrapper:hover .copyIcon,
+.copyWrapper:hover {
+  color: #247a92; /* More noticeable hover blue */
+}
+
+.copyWrapper:active {
+  color: #1e4f66; /* Deep blue for the active state */
+  transform: scale(0.98); /* Scale down slightly when clicked */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Add a subtle shadow for a pressed effect */
+}
+
+.copyWrapper:active .copyIcon {
+  transform: translateY(-3px) scale(0.95); /* Slight bounce and scale down effect for the icon */
+}

@@ -1,0 +1,96 @@
+/* === Base Textbox Styles (input & textarea) === */
+.textbox {
+  font-family: "Segoe UI", Roboto, sans-serif;
+  font-weight: 500;
+  line-height: 1.25;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  color: #111827;
+  background-color: #ffffff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  display: inline-block;
+  width: auto;
+  box-sizing: border-box;
+  resize: none;
+}
+
+.textbox:focus {
+  outline: none;
+  border-color: #0049b7;
+  box-shadow: 0 0 0 2px rgba(0, 73, 183, 0.25);
+}
+
+/* === Sizes === */
+.sm {
+  padding: 6px 10px;
+  font-size: 14px;
+}
+
+.md {
+  padding: 10px 14px;
+  font-size: 16px;
+}
+
+.lg {
+  padding: 12px 16px;
+  font-size: 18px;
+}
+
+/* === Full Width === */
+.fullWidth {
+  width: 100%;
+}
+
+/* === Disabled State === */
+.textbox:disabled {
+  background-color: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+  pointer-events: none;
+  border-color: #d1d5db;
+}
+
+/* === Multiline (textarea) specific enhancements === */
+textarea.textbox {
+  min-height: 100px;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.wrapper {
+  position: relative;
+  width: 100%;
+  display: inline-block;
+}
+
+.counter {
+  position: absolute;
+  right: 10px;
+  bottom: 6px;
+  font-size: 0.75rem;
+  color: #6b7280;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* === Dark Mode Support === */
+:global(.dark) .textbox {
+  background-color: #1f2937;
+  border-color: #374151;
+  color: #f3f4f6;
+}
+
+:global(.dark) .textbox:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.35);
+}
+
+:global(.dark) .textbox:disabled {
+  background-color: #374151;
+  color: #9ca3af;
+  border-color: #4b5563;
+}
+
+:global(.dark) .counter {
+  color: #9ca3af;
+}

@@ -1,0 +1,9 @@
+.linkButton {
+  color: #3434ff;
+  cursor: pointer;
+}
+
+.disabled {
+  color: gray;
+  pointer-events: none;
+}

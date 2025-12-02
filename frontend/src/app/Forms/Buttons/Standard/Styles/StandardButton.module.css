@@ -1,0 +1,86 @@
+.button {
+  border-radius: 4px; /* Changed to 10px */
+  padding: 8px 16px;
+  font-size: var(--font-body-1);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border: 2px solid transparent; /* Ensure a border even if there's no background */
+  color: #fff;
+}
+
+.buttonPrimary,
+.buttonOutlinePrimary {
+  border-color: var(--color-primary);
+  color: "#FFF";
+}
+
+.buttonPrimary {
+  background-color: var(--color-primary); /* Flat look: no background color */
+}
+
+.buttonPrimary:hover,
+.buttonOutlinePrimary:hover {
+  background-color: var(
+    --color-secondary
+  ); /* No background change on hover for flat look */
+}
+
+.buttonPrimary:hover,
+.buttonCheck:checked + .button,
+.button.active,
+.button.show,
+.button:first-child:active,
+:not(.buttonCheck) + .button:active {
+  border-color: var(
+    --color-secondary
+  ); /* Border color change on hover/active */
+}
+
+.button.disabled,
+.button:disabled,
+fieldset:disabled .button {
+  background-color: transparent; /* Flat, no background */
+  border-color: #e5e7eb;
+  color: #9ca3af;
+  opacity: 1;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.inputGroup .button {
+  padding: 8px 12px;
+}
+
+.buttonWarning,
+.buttonOutlineWarning {
+  border-color: var(--color-warning);
+  color: "#FFF";
+}
+
+.buttonWarning {
+  background-color: var(--color-warning); /* Flat look: no background color */
+}
+
+.buttonWarning:hover,
+.buttonOutlineWarning:hover {
+  background-color: #ffca2c;
+  border-color: #ffca2c;
+  color: black;
+}
+
+.buttonSuccess,
+.buttonOutlineSuccess {
+  border-color: var(--color-success);
+  color: "#FFF";
+}
+
+.buttonSuccess {
+  background-color: var(--color-success); /* Flat look: no background color */
+}
+
+.buttonSuccess:hover,
+.buttonOutlineSuccess:hover {
+  background-color: #50c06a;
+  border-color: #50c06a;
+}

@@ -1,0 +1,226 @@
+/* Layout wrapper with fixed nav buttons on the sides */
+.stepperWrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Scrollable container for stepper */
+.scrollContainer {
+  overflow-x: auto;
+  flex: 1;
+  padding: 0 2.5rem; /* Leaves space for arrows */
+  scroll-behavior: smooth;
+}
+
+/* Main stepper row */
+.stepperContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: max-content;
+  min-width: 100%;
+  padding: 1.5rem 0;
+  gap: 0.5rem;
+  box-sizing: border-box;
+}
+
+/* Individual step container */
+.stepItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1 0 auto;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.2s ease;
+}
+
+.stepItem:hover .circle {
+  box-shadow: 0 0 8px rgba(33, 150, 243, 0.5);
+}
+
+/* Step number circle */
+.circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-weight: 600;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #eee;
+  transition: background-color 0.3s, box-shadow 0.3s;
+  z-index: 1;
+  position: relative;
+}
+
+.circleInner {
+  z-index: 2;
+}
+
+/* Step label */
+.label {
+  margin-top: 0.6rem;
+  font-size: 0.85rem;
+  text-align: center;
+  max-width: 100px;
+  color: #444;
+  transition: opacity 0.3s ease;
+  opacity: 0.8;
+}
+
+.label:empty {
+  display: none;
+}
+
+/* Connecting line between steps */
+.connector {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  right: -50%;
+  height: 2px;
+  background: linear-gradient(to right, #ccc, #ccc);
+  z-index: 0;
+}
+
+/* Step states */
+.completed {
+  background-color: #4caf50;
+  color: white;
+}
+
+.active {
+  background-color: #2196f3;
+  color: white;
+  box-shadow: 0 0 12px rgba(33, 150, 243, 0.6);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.inactive {
+  background-color: #bbb;
+  color: white;
+  opacity: 0.8;
+}
+
+/* Pulse animation for active step */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0px rgba(33, 150, 243, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 12px rgba(33, 150, 243, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 0px rgba(33, 150, 243, 0.7);
+  }
+}
+
+/* Nav arrow buttons */
+.navButtonLeft,
+.navButtonRight {
+  position: absolute;
+  top: 35%;
+  transform: translateY(-50%);
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1.5rem;
+  background: white;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.navButtonLeft {
+  left: 0.5rem;
+}
+
+.navButtonRight {
+  right: 0.5rem;
+}
+
+.navButtonLeft:hover,
+.navButtonRight:hover {
+  background: #f0f0f0;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.navButtonLeft:disabled,
+.navButtonRight:disabled {
+  color: #ccc;
+  cursor: default;
+  transform: none;
+}
+
+.navArrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border-radius: 9999px;
+  color: #2196f3;
+  transition: transform 0.2s ease, background-color 0.2s ease,
+    box-shadow 0.2s ease;
+  cursor: pointer;
+  padding: 6px; /* No hardcoded width/height */
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navArrow:hover {
+  background-color: #e3f2fd;
+  /* transform: scale(1.05); */
+  box-shadow: 0 2px 6px rgba(33, 150, 243, 0.2);
+}
+
+.navArrow:active {
+  background-color: #bbdefb;
+  /* transform: scale(0.97); */
+  box-shadow: 0 1px 2px rgba(33, 150, 243, 0.3);
+}
+
+/* Mobile-friendly tweaks */
+@media (max-width: 768px) {
+  .scrollContainer {
+    overflow-x: auto;
+    padding: 0 2rem;
+  }
+
+  .stepperContainer {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 1.5rem;
+  }
+
+  .stepItem {
+    flex: 0 0 auto;
+  }
+
+  .circle {
+    width: 28px;
+    height: 28px;
+    font-size: 0.85rem;
+  }
+
+  .label {
+    font-size: 0.75rem;
+    max-width: 80px;
+  }
+
+  .navButtonLeft,
+  .navButtonRight {
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.25rem;
+  }
+}

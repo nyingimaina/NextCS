@@ -1,0 +1,7 @@
+backend.old.7z
+node_modules
+backend/Installer/
+backend/logs
+backend/WorkingDirectory
+backend/trace.zip
+backend/traces/

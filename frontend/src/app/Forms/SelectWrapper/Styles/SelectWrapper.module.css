@@ -1,0 +1,23 @@
+.createPrompt {
+  font-weight: bold;
+  cursor: pointer;
+  color: #33f;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 10px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.createPrompt:hover {
+  color: #119;
+  background-color: rgba(51, 51, 255, 0.1);
+}
+
+.createPrompt:active {
+  background-color: rgba(51, 51, 255, 0.2);
+}
