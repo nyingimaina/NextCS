@@ -11,7 +11,6 @@
   - [Initial Project Setup](#initial-project-setup)
   - [Running the Application](#running-the-application)
   - [Managing Dependencies](#managing-dependencies)
-  - [OpenAI API Key Configuration](#openai-api-key-configuration)
 - [Project Structure](#project-structure)
 - [Why NextCS?](#why-nextcs)
 - [Contributing](#contributing)
