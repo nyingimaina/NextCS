@@ -180,7 +180,11 @@ replace_in_file() {
     local escaped_placeholder=$(sed -e 's/[][\/$*.^|{}]/\\&/g' <<<"$placeholder")
     # Escape for sed replacement string
     local escaped_value=$(sed -e 's/[\/&]/\\&/g' <<<"$value")
-    sed -i '' "s/$escaped_placeholder/$escaped_value/g" "$file"
+    
+    # Use a backup file for cross-platform compatibility with sed -i
+    sed -i.bak "s/$escaped_placeholder/$escaped_value/g" "$file"
+    # Remove the backup file
+    rm "${file}.bak"
 }
 
 # Perform replacements
@@ -217,9 +221,9 @@ if [[ -n "$pascal_case_name" ]]; then
     fi
     if [ -f "NextCS.sln" ]; then
         # This is a bit brittle, but should work for the current solution file format.
-        # It replaces both the project name and the path.
-        sed -i "s/app.csproj/${pascal_case_name}.csproj/g" "NextCS.sln"
-        sed -i "s/\"app\",/\"${pascal_case_name}\",/g" "NextCS.sln"
+        # It replaces both the project name and the path, using the backup-and-remove strategy for compatibility.
+        sed -i.bak -e "s/app.csproj/${pascal_case_name}.csproj/g" -e "s/\"app\",/\"${pascal_case_name}\",/g" "NextCS.sln"
+        rm "NextCS.sln.bak"
         echo "  - Updated NextCS.sln"
     fi
 fi
