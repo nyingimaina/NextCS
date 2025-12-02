@@ -21,7 +21,7 @@ pascal_case_name=""
 kebab_case_name=""
 
 # Find all unique placeholders and store them. Exclude .git, node_modules, and this script itself.
-placeholders=$(grep -r -o -E '{{[a-zA-Z0-9_-]+}}' . --exclude-dir={.git,node_modules,bin,obj} --exclude="setup.sh" | sort | uniq)
+placeholders=$(grep -r -h -o -E '\{\{[a-zA-Z0-9_-]+\}\}' . --exclude-dir={.git,node_modules,bin,obj} --exclude="setup.sh" | sort | uniq)
 
 if [ -z "$placeholders" ]; then
     echo -e "${GREEN}No placeholders found. Project seems to be already set up.${NC}"
