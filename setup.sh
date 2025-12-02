@@ -113,7 +113,7 @@ if [[ ${placeholder_map[$app_name_placeholder]} ]]; then
         if ! [[ "$kebab_case_name" =~ ^[a-z0-9_-]+$ ]]; then
             echo -e "${RED}Invalid name for package.json: '${kebab_case_name}'. It must be lowercase and contain only letters, numbers, hyphens, or underscores.${NC}\n"
             continue
-        }
+        fi
 
         placeholder_values["$app_name_placeholder-csharp"]=$pascal_case_name
         placeholder_values["$app_name_placeholder-kebab"]=$kebab_case_name
