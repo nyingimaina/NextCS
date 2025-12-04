@@ -1,12 +1,15 @@
 
 
 using System.Net;
-using Contrail;
 using {{your-app-name}}.Emailing;
 using Microsoft.AspNetCore.Diagnostics;
 using Serilog;
+using {{your-app-name}}.Database;
+using Rocket.Libraries.DatabaseIntegrator;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddHttpContextAccessor();
 
 
 builder.Services.ConfigureCors();
@@ -27,6 +30,8 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 // Add services to the container.
+builder.Services.Configure<DatabaseConnectionSettings>(builder.Configuration.GetSection("DatabaseConnectionSettings"));
+
 builder.Services.RegisterCustomServices();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

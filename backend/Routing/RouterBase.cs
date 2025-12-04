@@ -1,6 +1,6 @@
 using Microsoft.OpenApi.Models;
 
-namespace Musketeer.Routing
+namespace {{your-app-name}}.Routing
 {
     public abstract class RouterBase
     {
